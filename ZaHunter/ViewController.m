@@ -8,13 +8,15 @@
 
 #import "ViewController.h"
 #import <MapKit/MapKit.h>
+#import "Pizzaria.h"
 
 @interface ViewController () <CLLocationManagerDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property CLLocationManager *locationManager;
-@property NSArray *pizzaRestaurants;
+@property NSMutableArray *pizzaRestaurants;
+@property CLLocation *currentLocation;
 
 @property UIActivityIndicatorView *activityIndicator;
 
@@ -26,6 +28,8 @@
 {
     [super viewDidLoad];
 
+	self.pizzaRestaurants = [NSMutableArray new];
+
 	self.locationManager = [CLLocationManager new];
 	self.locationManager.delegate = self;
 
@@ -35,27 +39,24 @@
 	[self.locationManager startUpdatingLocation];
 	[self.activityIndicator startAnimating];
 	[self.view addSubview:self.activityIndicator];
+
+	self.tableView.hidden = YES;
 }
 
-- (void)reverseGeocode:(CLLocation *)location
-{
-	CLGeocoder *geocoder = [CLGeocoder new];
-	[geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
-		CLPlacemark *placemark = [placemarks firstObject];
-		[self findLocationsNear:placemark.location];
-	}];
-}
-
-- (void)findLocationsNear:(CLLocation *)location
+- (void)findNearPizzaRestaurants
 {
 	MKLocalSearchRequest *request = [MKLocalSearchRequest new];
-	request.naturalLanguageQuery = @"Pizza";
-	request.region = MKCoordinateRegionMake(location.coordinate, MKCoordinateSpanMake(1, 1));
+	request.naturalLanguageQuery = @"pizza";
+	request.region = MKCoordinateRegionMakeWithDistance(self.currentLocation.coordinate, 5000, 5000);
 
 	MKLocalSearch *search = [[MKLocalSearch alloc] initWithRequest:request];
 	[search startWithCompletionHandler:^(MKLocalSearchResponse *response, NSError *error) {
-		self.pizzaRestaurants = response.mapItems;
+		for (MKMapItem *mapItem in response.mapItems) {
+			[self.pizzaRestaurants addObject: [[Pizzaria alloc] initWithMapItem:mapItem]];
+		}
+
 		[self.tableView reloadData];
+		self.tableView.hidden = NO;
 
 		[self.activityIndicator stopAnimating];
 		[self.activityIndicator removeFromSuperview];
@@ -68,7 +69,9 @@
 {
 	for (CLLocation *location in locations) {
 		[self.locationManager stopUpdatingLocation];
-		[self reverseGeocode:location];
+
+		self.currentLocation = location;
+		[self findNearPizzaRestaurants];
 	}
 }
 
@@ -82,9 +85,9 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellID"];
-	MKMapItem *mapItem = self.pizzaRestaurants[indexPath.row];
-
-	cell.textLabel.text = mapItem.name;
+	Pizzaria *restaurant = self.pizzaRestaurants[indexPath.row];
+	cell.textLabel.text = restaurant.mapItem.name;
+	cell.detailTextLabel.text = [NSString stringWithFormat:@"%.02f m", [restaurant distanceFromLocation:self.currentLocation]];
 
 	return cell;
 }

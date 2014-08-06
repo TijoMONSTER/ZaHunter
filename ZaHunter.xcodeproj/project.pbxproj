@@ -22,6 +22,7 @@
 		2C1603B31992B7C400DC4A80 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2C1603B11992B7C400DC4A80 /* InfoPlist.strings */; };
 		2C1603B51992B7C400DC4A80 /* ZaHunterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1603B41992B7C400DC4A80 /* ZaHunterTests.m */; };
 		2C1603BF1992BCBE00DC4A80 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C1603BE1992BCBE00DC4A80 /* MapKit.framework */; };
+		2C1603C81992D15700DC4A80 /* Pizzaria.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1603C71992D15700DC4A80 /* Pizzaria.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,8 @@
 		2C1603B21992B7C400DC4A80 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2C1603B41992B7C400DC4A80 /* ZaHunterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZaHunterTests.m; sourceTree = "<group>"; };
 		2C1603BE1992BCBE00DC4A80 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		2C1603C61992D15700DC4A80 /* Pizzaria.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pizzaria.h; sourceTree = "<group>"; };
+		2C1603C71992D15700DC4A80 /* Pizzaria.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pizzaria.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +120,8 @@
 			isa = PBXGroup;
 			children = (
 				2C1603981992B7C400DC4A80 /* AppDelegate.h */,
+				2C1603C61992D15700DC4A80 /* Pizzaria.h */,
+				2C1603C71992D15700DC4A80 /* Pizzaria.m */,
 				2C1603991992B7C400DC4A80 /* AppDelegate.m */,
 				2C16039B1992B7C400DC4A80 /* Main.storyboard */,
 				2C16039E1992B7C400DC4A80 /* ViewController.h */,
@@ -256,6 +261,7 @@
 				2C1603A01992B7C400DC4A80 /* ViewController.m in Sources */,
 				2C16039A1992B7C400DC4A80 /* AppDelegate.m in Sources */,
 				2C1603961992B7C400DC4A80 /* main.m in Sources */,
+				2C1603C81992D15700DC4A80 /* Pizzaria.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -460,6 +466,7 @@
 				2C1603BA1992B7C400DC4A80 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2C1603BB1992B7C400DC4A80 /* Build configuration list for PBXNativeTarget "ZaHunterTests" */ = {
 			isa = XCConfigurationList;
@@ -468,6 +475,7 @@
 				2C1603BD1992B7C400DC4A80 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
