@@ -11,6 +11,6 @@
 
 @interface MapViewController : UIViewController
 
-- (void)reloadAnnotationsWithArray:(NSMutableArray *)pizzaRestaurants currentLocation:(CLLocation *)currentLocation;
+- (void)reloadAnnotationsWithArray:(NSMutableArray *)pizzaRestaurants;
 
 @end

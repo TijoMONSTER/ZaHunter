@@ -15,7 +15,6 @@
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 
 @property NSMutableArray *pizzaRestaurants;
-@property CLLocation *currentLocation;
 
 @end
 
@@ -26,10 +25,9 @@
     [super viewDidLoad];
 }
 
-- (void)reloadAnnotationsWithArray:(NSMutableArray *)pizzaRestaurants currentLocation:(CLLocation *)currentLocation
+- (void)reloadAnnotationsWithArray:(NSMutableArray *)pizzaRestaurants
 {
 	self.pizzaRestaurants = pizzaRestaurants;
-	self.currentLocation = currentLocation;
 	// set annotations
 	[self addAnnotations];
 	self.mapView.hidden = NO;

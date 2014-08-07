@@ -77,7 +77,7 @@
 		// reload table view
 		[(ListViewController *)self.viewControllers[0] reloadTableViewWithArray:self.pizzaRestaurants currentLocation:self.currentLocation];
 		// reload map view
-		[(MapViewController *)self.viewControllers[1] reloadAnnotationsWithArray:self.pizzaRestaurants currentLocation:self.currentLocation];
+		[(MapViewController *)self.viewControllers[1] reloadAnnotationsWithArray:self.pizzaRestaurants];
 
 		[self.activityIndicator stopAnimating];
 		[self.activityIndicator removeFromSuperview];
