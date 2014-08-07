@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  TabBarController.h
 //  ZaHunter
 //
 //  Created by Iván Mervich on 8/6/14.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface TabBarController : UITabBarController
 
 @end

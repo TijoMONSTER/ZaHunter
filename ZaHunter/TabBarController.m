@@ -1,18 +1,18 @@
 //
-//  ViewController.m
+//  TabBarController.m
 //  ZaHunter
 //
 //  Created by Iván Mervich on 8/6/14.
 //  Copyright (c) 2014 Mobile Makers. All rights reserved.
 //
 
-#import "ViewController.h"
-#import <MapKit/MapKit.h>
+#import "TabBarController.h"
 #import "Pizzaria.h"
+#import "ListViewController.h"
+#import "MapViewController.h"
+#import <MapKit/MapKit.h>
 
-@interface ViewController () <CLLocationManagerDelegate, UITableViewDataSource>
-
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@interface TabBarController () <CLLocationManagerDelegate>
 
 @property CLLocationManager *locationManager;
 @property NSMutableArray *pizzaRestaurants;
@@ -22,7 +22,7 @@
 
 @end
 
-@implementation ViewController
+@implementation TabBarController
 
 - (void)viewDidLoad
 {
@@ -30,17 +30,16 @@
 
 	self.pizzaRestaurants = [NSMutableArray new];
 
-	self.locationManager = [CLLocationManager new];
-	self.locationManager.delegate = self;
-
 	self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
 	self.activityIndicator.center = self.view.center;
 
+	self.locationManager = [CLLocationManager new];
+	self.locationManager.delegate = self;
+
 	[self.locationManager startUpdatingLocation];
+
 	[self.activityIndicator startAnimating];
 	[self.view addSubview:self.activityIndicator];
-
-	self.tableView.hidden = YES;
 }
 
 - (void)findNearPizzaRestaurants
@@ -75,8 +74,10 @@
 			}
 		}
 
-		[self.tableView reloadData];
-		self.tableView.hidden = NO;
+		// reload table view
+		[(ListViewController *)self.viewControllers[0] reloadTableViewWithArray:self.pizzaRestaurants currentLocation:self.currentLocation];
+		// reload map view
+		[(MapViewController *)self.viewControllers[1] reloadAnnotationsWithArray:self.pizzaRestaurants currentLocation:self.currentLocation];
 
 		[self.activityIndicator stopAnimating];
 		[self.activityIndicator removeFromSuperview];
@@ -95,24 +96,9 @@
 	}
 }
 
-#pragma mark UITableViewDataSource
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
-	return [self.pizzaRestaurants count];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellID"];
-
-	if ([self.pizzaRestaurants count] > 0) {
-		Pizzaria *restaurant = self.pizzaRestaurants[indexPath.row];
-		cell.textLabel.text = restaurant.mapItem.name;
-		cell.detailTextLabel.text = [NSString stringWithFormat:@"%.02f m", [restaurant distanceFromLocation:self.currentLocation]];
-	}
-
-	return cell;
+	NSLog(@"location error %@", [error localizedDescription]);
 }
 
 @end
