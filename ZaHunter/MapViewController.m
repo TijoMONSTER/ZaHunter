@@ -25,18 +25,24 @@
     [super viewDidLoad];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+	[super viewWillAppear:animated];
+	[self.mapView removeAnnotations:self.mapView.annotations];
+	[self addAnnotations];
+}
+
 - (void)reloadAnnotationsWithArray:(NSMutableArray *)pizzaRestaurants
 {
 	self.pizzaRestaurants = pizzaRestaurants;
 	// set annotations
 	[self addAnnotations];
-	self.mapView.hidden = NO;
 }
 
 - (void)addAnnotations
 {
 	for (Pizzaria *restaurant in self.pizzaRestaurants) {
-
+		NSLog(@"adding annotation");
 		MKPointAnnotation *annotation = [MKPointAnnotation new];
 		annotation.title = restaurant.mapItem.name;
 		annotation.coordinate = restaurant.mapItem.placemark.location.coordinate;
