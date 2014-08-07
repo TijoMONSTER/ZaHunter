@@ -47,12 +47,32 @@
 {
 	MKLocalSearchRequest *request = [MKLocalSearchRequest new];
 	request.naturalLanguageQuery = @"pizza";
-	request.region = MKCoordinateRegionMakeWithDistance(self.currentLocation.coordinate, 5000, 5000);
+	// 10 kilometers
+	request.region = MKCoordinateRegionMakeWithDistance(self.currentLocation.coordinate, 10000, 10000);
 
 	MKLocalSearch *search = [[MKLocalSearch alloc] initWithRequest:request];
 	[search startWithCompletionHandler:^(MKLocalSearchResponse *response, NSError *error) {
-		for (MKMapItem *mapItem in response.mapItems) {
-			[self.pizzaRestaurants addObject: [[Pizzaria alloc] initWithMapItem:mapItem]];
+
+		NSArray *mapItems = [response.mapItems sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+
+			// get the locations
+			CLLocation *locationObj1 = [(MKMapItem *)obj1 placemark].location;
+			CLLocation *locationObj2 = [(MKMapItem *)obj2 placemark].location;
+			// calculate distances with current location
+			NSNumber *distanceObj1 = [NSNumber numberWithDouble:[locationObj1 distanceFromLocation:self.currentLocation]];
+			NSNumber *distanceObj2 = [NSNumber numberWithDouble:[locationObj2 distanceFromLocation:self.currentLocation]];
+
+			return [distanceObj1 compare:distanceObj2];
+		}];
+
+		// add 4 elements to self.pizzaRestaurants
+		int numItems = 0;
+		for (MKMapItem *mapItem in mapItems) {
+			if (numItems++ < 4) {
+				[self.pizzaRestaurants addObject:[[Pizzaria alloc] initWithMapItem:mapItem]];
+			} else {
+				break;
+			}
 		}
 
 		[self.tableView reloadData];
@@ -85,9 +105,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellID"];
-	Pizzaria *restaurant = self.pizzaRestaurants[indexPath.row];
-	cell.textLabel.text = restaurant.mapItem.name;
-	cell.detailTextLabel.text = [NSString stringWithFormat:@"%.02f m", [restaurant distanceFromLocation:self.currentLocation]];
+
+	if ([self.pizzaRestaurants count] > 0) {
+		Pizzaria *restaurant = self.pizzaRestaurants[indexPath.row];
+		cell.textLabel.text = restaurant.mapItem.name;
+		cell.detailTextLabel.text = [NSString stringWithFormat:@"%.02f m", [restaurant distanceFromLocation:self.currentLocation]];
+	}
 
 	return cell;
 }

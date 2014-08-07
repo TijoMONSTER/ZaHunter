@@ -8,10 +8,6 @@
 
 #import "Pizzaria.h"
 
-@interface Pizzaria ()
-
-@end
-
 @implementation Pizzaria
 
 - (instancetype)initWithMapItem:(MKMapItem *)mapItem
